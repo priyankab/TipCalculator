@@ -7,6 +7,7 @@
 //
 
 #import "TipViewController.h"
+#import "SettingsViewController.h"
 
 @interface TipViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *billTextField;
@@ -16,6 +17,7 @@
 
 - (IBAction)onTapAction:(id)sender; //Compile time thing that helps Xcode understand that this event is Compile time. You want to link this event to actions in your class
 - (void) updateValues;
+- (void) onSettingsButton;
 
 @end
 
@@ -36,6 +38,8 @@
     [super viewDidLoad];
     [self updateValues];
     // Do any additional setup after loading the view from its nib.
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButton)];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -62,5 +66,29 @@
     self.tipLabel.text = [NSString stringWithFormat:@"$%0.2f",tipValue];
     self.totalLabel.text = [NSString stringWithFormat:@"$%0.2f", totalValue];
     
+}
+- (void)onSettingsButton {
+    [self.navigationController pushViewController:[[SettingsViewController alloc] init] animated:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"view will appear");
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    int intTipValue = [defaults integerForKey:@"tip_val"];
+    self.tipSegmentControl.selectedSegmentIndex = intTipValue;
+    [self updateValues];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"view did appear");
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    NSLog(@"view will disappear");
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    NSLog(@"view will disappear");
 }
 @end
